@@ -40,10 +40,10 @@ If you do not want to run MotionCor, this must correspond to the motion correcte
 ba_set_pixelsize//float|str//Pixel size of the raw images in Angstrom. If 'header', the pixel size is read 
 from the header//header//
 ad_set_max_cpus//int//Number of processes used in parallel for creating and aligning the tilt-series. Default: 
-available logical cores//{multiprocessing.cpu_count()}//
+available logical cores//10//
 
 ba_path_raw//str//Path of the raw images directory. Only used if MotionCor2 is activated. The path can end with
-'*', meaning that the movies are grouped into sub-folders (i.e. raw/stack*)//../raw//
+'*', meaning that the movies are grouped into sub-folders (i.e. raw/stack*)//rawFrame//
 ad_path_motioncor//str//Where the MotionCor outputs will go. Will be created if doesn't exist//motioncor//
 ad_path_stacks//str//Path of stacks and Ctffind outputs. Will be created if doesn't exist//stacks//
 ad_path_mdocfiles//str//Path of mdoc files. Used to create the rawtlt file. File names must be 
@@ -62,11 +62,10 @@ skip the stacks that are registered inside this file (<nb>:<nb>:). The stack num
 ad_run_nb//int|list//Process only these/this stack(s). Must correspond to the stack number at the field 
 ba_set_field_nb (+/- 0 padding). This is ignored when on-the-fly is activated. Default: Process everything//all//
 
-ba_otf_max_images_per_stack//int//Expected number of images per stacks. Used to catch the last stack//37//
+ba_otf_max_images_per_stack//int//Expected number of images per stacks. Used to catch the last stack//41//
 ba_otf_max_time2try//float//Tolerated time (min) of inactivity//20//
 
-ba_mc_motioncor//str//Path of MotionCor2 program//
-/apps/strubi/motioncorr/2-1.1.0-gcc5.4.0-cuda8.0-sm61/MotionCor2//
+ba_mc_motioncor//str//Path of MotionCor2 program//MotionCor2//
 ba_mc_desired_pixelsize//float|str//Desired pixel size. If lower than current pixel size, Fourier cropping 
 will be done by MotionCor2. If 'current': no Ftbin applied, If 'ps_x2': Ftbin=2//ps_x2//
 ad_mc_throw//int//Frame to remove, from the first frame. From 0//0//
@@ -80,15 +79,15 @@ frames, the sums of these sub-groups are aligned. The shifts of individual frame
 extrapolated. Recommended for low-signal movie stacks//1//
 ba_mc_gpu//int|str//GPU IDs. Can be a list of int separated by comas (ex: 0,1,2,3) or 'auto'. These must correspond 
 to the ID displayed using nvidia-smi. If 'auto', the program will select the visible GPUs 
-that do not have any process running//auto//
+that do not have any process running//0,1//
 ba_mc_jobs_per_gpu//int//Number of MotionCor jobs per GPU. I recommend to try with one stack to see how many
 memory is allocated//3//
 ad_mc_gpu_mem_usage//float//GPU memory allocated to buffer the movie stacks. For multiple MotionCor2 jobs in one
 GPU, it is recommended to set it to 0. Default=0.5//0.5//
-ba_mc_tif//bool//If the raw images are in TIF//0//
-ba_mc_gain//str//Gain reference for MotionCor2. Must have the corrected rotation and be a mrc file//nogain//
+ba_mc_tif//bool//If the raw images are in TIF//1//
+ba_mc_gain//str//Gain reference for MotionCor2. Must have the corrected rotation and be a mrc file//gain.mrc//
 
-ba_ctf_ctffind//str//Path of Ctffind///apps/strubi/ctf/4.1.5/ctffind//
+ba_ctf_ctffind//str//Path of Ctffind//ctffind//
 ad_ctf_voltage//float//Acceleration voltage (kV)//300//
 ad_ctf_cs//float//Spherical aberration (mm)//2.7//
 ad_ctf_amp_cont//float//Amplitude contrast (0 to 1)//0.8//
@@ -109,9 +108,9 @@ ba_brt_gold_size//float//Size of gold beads in nm//10//
 ba_brt_rotation_angle//float//Initial angle of rotation in the plane of projection. This is the CCW positive 
 rotation from the vertical axis to the suspected tilt axis in the unaligned views//86//
 ad_brt_bin_coarse//int//Bin used for coarsed alignment. If 'auto', set the binning to have the gold beads diameter 
-to ~12.5 pixel//auto//
+to ~12.5 pixel//4//
 ad_brt_target_nb_beads//int//(Generous) Target number of beads per projection. Usually 25 is fine//25//
-ad_brt_bin_ali//int//Binning used for final stack and tomogram reconstruction//5//
+ad_brt_bin_ali//int//Binning used for final stack and tomogram reconstruction//8//
 ad_brt_start//int//Starts at this step. See batchruntomo documentation.//0//
 ad_brt_end//int//Ends at this step. 12: stop after gold erase. 20: stop after tomogram generation and rotation//20"""
 
