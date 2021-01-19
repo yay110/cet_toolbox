@@ -289,7 +289,7 @@ class InputParameters:
         self.ad_ctf_astig_type = None
         self.ad_ctf_exhaustive = None
         self.ad_ctf_astig_restraint = None
-        self.ad_ctf_phase_shift = None
+        self.ba_ctf_phase_shift = None
 
         self.ba_brt_gold_size = None
         self.ba_brt_rotation_angle = None
@@ -1751,9 +1751,8 @@ class Ctffind:
                       inputs.ad_ctf_astig_type,
                       inputs.ad_ctf_exhaustive,
                       inputs.ad_ctf_astig_restraint,
-                      inputs.ad_ctf_phase_shift,
+                      inputs.ba_ctf_phase_shift,
                       'no']
-
         input_string = '\n'.join(input_dict)
         return cmd, input_string
 
