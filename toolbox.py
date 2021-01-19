@@ -32,10 +32,10 @@ ba_set_prefix2look4//str//Look for the movies/sums with this prefix. If '*', cat
 NB: This is used even if MotionCor is deactivated//*//
 ba_set_prefix2add//str//Prefix to add to every output (motion corrected images, stacks, logs, etc.). 
 NB: prefix/suffix from the original images are removed//WT//
-ba_set_field_nb//int//Field (sep: '_', counting from 0) containing stack number in the filename of raw images. 
+ad_set_field_nb//int//Field (sep: '_', counting from 0) containing stack number in the filename of raw images. 
 If you do not want to run MotionCor, this must correspond to the motion corrected images. Only numbers will 
 be kept, allowing to have tilt<nb>//1//
-ba_set_field_tilt//int//Field (sep: '_', counting from 0) containing tilt angle in the filename of raw images. 
+ad_set_field_tilt//int//Field (sep: '_', counting from 0) containing tilt angle in the filename of raw images. 
 If you do not want to run MotionCor, this must correspond to the motion corrected images//3//
 ba_set_pixelsize//float|str//Pixel size of the raw images in Angstrom. If 'header', the pixel size is read 
 from the header//header//
@@ -43,7 +43,7 @@ ad_set_max_cpus//int//Number of processes used in parallel for creating and alig
 available logical cores//10//
 
 ba_path_raw//str//Path of the raw images directory. Only used if MotionCor2 is activated. The path can end with
-'*', meaning that the movies are grouped into sub-folders (i.e. raw/stack*)//rawFrame//
+'*', meaning that the movies are grouped into sub-folders (i.e. raw/stack*)//rawFrames//
 ad_path_motioncor//str//Where the MotionCor outputs will go. Will be created if doesn't exist//motioncor//
 ad_path_stacks//str//Path of stacks and Ctffind outputs. Will be created if doesn't exist//stacks//
 ad_path_mdocfiles//str//Path of mdoc files. Used to create the rawtlt file. File names must be 
@@ -56,16 +56,16 @@ the ba_set settings must correspond to these images//1//
 ba_run_ctffind//bool//Estimate the defocus of the lower tilt image of each stack using Ctffind//1//
 ba_run_stack//bool//Create the stack from motion-corrected sums//1//
 ba_run_batchruntomo//bool//Align the tilt-series using IMOD batchruntomo//1//
-ba_run_onthefly//bool//Triggers on-the-fly processing//0//
+ad_run_onthefly//bool//Triggers on-the-fly processing//0//
 ad_run_overwrite//bool//Will re-process every stack. If 0, will look at a file (toolbox_stack_processed.txt) and 
 skip the stacks that are registered inside this file (<nb>:<nb>:). The stack numbers can be padded with 0//0//
 ad_run_nb//int|list//Process only these/this stack(s). Must correspond to the stack number at the field 
-ba_set_field_nb (+/- 0 padding). This is ignored when on-the-fly is activated. Default: Process everything//all//
+ad_set_field_nb (+/- 0 padding). This is ignored when on-the-fly is activated. Default: Process everything//all//
 
-ba_otf_max_images_per_stack//int//Expected number of images per stacks. Used to catch the last stack//41//
-ba_otf_max_time2try//float//Tolerated time (min) of inactivity//20//
+ad_otf_max_images_per_stack//int//Expected number of images per stacks. Used to catch the last stack//41//
+ad_otf_max_time2try//float//Tolerated time (min) of inactivity//20//
 
-ba_mc_motioncor//str//Path of MotionCor2 program//MotionCor2//
+ad_mc_motioncor//str//Path of MotionCor2 program//MotionCor2//
 ba_mc_desired_pixelsize//float|str//Desired pixel size. If lower than current pixel size, Fourier cropping 
 will be done by MotionCor2. If 'current': no Ftbin applied, If 'ps_x2': Ftbin=2//ps_x2//
 ad_mc_throw//int//Frame to remove, from the first frame. From 0//0//
@@ -73,21 +73,21 @@ ad_mc_trunc//int//Frame to remove, from the last frame. From 0//0//
 ad_mc_tolerance//float//Tolerance of alignment accuracy: less than X pixel//0.5//
 ad_mc_iter//int//Iterations after which the alignment stops (if tolerance not achieved already)//10//
 ad_mc_patch//int,int(,int)//After global alignment, divides the corrected frames into X*X patches on which 
-the local motion is measured//5,5,20//
+the local motion is measured//1,1//
 ad_mc_group//int//Equally divide the input stack into non-overlapping sub-groups. Instead of aligning individual 
 frames, the sums of these sub-groups are aligned. The shifts of individual frames are then interpolated and 
 extrapolated. Recommended for low-signal movie stacks//1//
-ba_mc_gpu//int|str//GPU IDs. Can be a list of int separated by comas (ex: 0,1,2,3) or 'auto'. These must correspond 
+ad_mc_gpu//int|str//GPU IDs. Can be a list of int separated by comas (ex: 0,1,2,3) or 'auto'. These must correspond 
 to the ID displayed using nvidia-smi. If 'auto', the program will select the visible GPUs 
 that do not have any process running//0,1//
 ba_mc_jobs_per_gpu//int//Number of MotionCor jobs per GPU. I recommend to try with one stack to see how many
 memory is allocated//3//
 ad_mc_gpu_mem_usage//float//GPU memory allocated to buffer the movie stacks. For multiple MotionCor2 jobs in one
 GPU, it is recommended to set it to 0. Default=0.5//0.5//
-ba_mc_tif//bool//If the raw images are in TIF//1//
-ba_mc_gain//str//Gain reference for MotionCor2. Must have the corrected rotation and be a mrc file//gain.mrc//
+ad_mc_tif//bool//If the raw images are in TIF//1//
+ad_mc_gain//str//Gain reference for MotionCor2. Must have the corrected rotation and be a mrc file//gain.mrc//
 
-ba_ctf_ctffind//str//Path of Ctffind//ctffind//
+ad_ctf_ctffind//str//Path of Ctffind//ctffind//
 ad_ctf_voltage//float//Acceleration voltage (kV)//300//
 ad_ctf_cs//float//Spherical aberration (mm)//2.7//
 ad_ctf_amp_cont//float//Amplitude contrast (0 to 1)//0.8//
@@ -100,7 +100,7 @@ ad_ctf_step_def//float//Defocus search step//500//
 ad_ctf_astig_type//str|float//Do you know what astigmatism is present?//no//
 ad_ctf_exhaustive//str//Slower, more exhaustive search//no//
 ad_ctf_astig_restraint//str//Use a restraint on astigmatism//no//
-ad_ctf_phase_shift//float//Find additional phase shift//no//
+ba_ctf_phase_shift//float//Find additional phase shift//no//
 
 ad_brt_adoc//str//Batchruntomo adoc file to use. Overwrites every ba_brt parameters except ad_brt_start 
 and ad_brt_end//default//
@@ -248,8 +248,8 @@ class InputParameters:
         # self.get_inputs will update them using interactive mode or input file
         self.ba_set_prefix2look4 = None
         self.ba_set_prefix2add = None
-        self.ba_set_field_nb = None
-        self.ba_set_field_tilt = None
+        self.ad_set_field_nb = None
+        self.ad_set_field_tilt = None
         self.ba_set_pixelsize = None
         self.ad_set_max_cpus = None
 
@@ -259,15 +259,15 @@ class InputParameters:
         self.ad_path_mdocfiles = None
         self.ad_path_logfile = None
 
-        self.ba_otf_max_images_per_stack = None
-        self.ba_otf_max_time2try = None
+        self.ad_otf_max_images_per_stack = None
+        self.ad_otf_max_time2try = None
 
-        self.ba_mc_motioncor = None
+        self.ad_mc_motioncor = None
         self.ba_mc_desired_pixelsize = None
-        self.ba_mc_gpu = None
+        self.ad_mc_gpu = None
         self.ba_mc_jobs_per_gpu = None
-        self.ba_mc_tif = None
-        self.ba_mc_gain = None
+        self.ad_mc_tif = None
+        self.ad_mc_gain = None
         self.ad_mc_throw = None
         self.ad_mc_trunc = None
         self.ad_mc_tolerance = None
@@ -276,7 +276,7 @@ class InputParameters:
         self.ad_mc_group = None
         self.ad_mc_gpu_mem_usage = None
 
-        self.ba_ctf_ctffind = None
+        self.ad_ctf_ctffind = None
         self.ad_ctf_voltage = None
         self.ad_ctf_cs = None
         self.ad_ctf_amp_cont = None
@@ -304,7 +304,7 @@ class InputParameters:
         self.ba_run_ctffind = None
         self.ba_run_stack = None
         self.ba_run_batchruntomo = None
-        self.ba_run_onthefly = None
+        self.ad_run_onthefly = None
         self.ad_run_overwrite = None
         self.ad_run_nb = None  # see self._set_stack
 
@@ -330,7 +330,7 @@ class InputParameters:
         # update the attributes with collected inputs
         for key, value in user_inputs.items():
             setattr(self, key, value)
-        self.hidden_oft_gpu = self.ba_mc_gpu
+        self.hidden_oft_gpu = self.ad_mc_gpu
 
         self._check_inputs()
 
@@ -395,12 +395,12 @@ class InputParameters:
         """Warn the user about specific run settings."""
         if not self.ba_run_motioncor:
             logger(f"{Colors.r}WARNING: MotionCor deactivated.\n"
-                   f"'ba_set_field_nb', 'ba_set_field_tilt' must match the motion corrected images.{Colors.reset}\n")
+                   f"'ad_set_field_nb', 'ad_set_field_tilt' must match the motion corrected images.{Colors.reset}\n")
         if not self.ba_run_stack and self.ba_run_batchruntomo:
             logger(f"{Colors.r}WARNING: Newstack deactivated.\n"
                    f"Your stacks must be as followed: <ad_path_stacks>/stack<nb>/<ba_prefix2add>_<nb>.st, "
                    f"with <nb> being the 3 digit stack number (padded with zeros).{Colors.reset}\n")
-        if self.ba_run_onthefly and self.hidden_run_nb:
+        if self.ad_run_onthefly and self.hidden_run_nb:
             logger(f"{Colors.r}WARNING: On-the-fly mode activated with positive restriction (--nb/ad_run_nb).\n"
                    f"Positive restrictions are currently ignored in this mode.{Colors.reset}\n")
 
@@ -570,8 +570,8 @@ class InputParameters:
         head = 'Check inputs:'
 
         # convert to int
-        for _input in ('ba_set_field_nb',
-                       'ba_set_field_tilt',
+        for _input in ('ad_set_field_nb',
+                       'ad_set_field_tilt',
                        'ba_mc_jobs_per_gpu',
                        'ad_set_max_cpus'):
             try:
@@ -584,9 +584,9 @@ class InputParameters:
                        'ba_run_ctffind',
                        'ba_run_stack',
                        'ba_run_batchruntomo',
-                       'ba_run_onthefly',
+                       'ad_run_onthefly',
                        'ad_run_overwrite',
-                       'ba_mc_tif'):
+                       'ad_mc_tif'):
             try:
                 setattr(self, _input, bool(int(getattr(self, _input))))
             except ValueError:
@@ -607,7 +607,7 @@ class InputParameters:
         make sure it overwrites the inputs.
         """
         if self.cmd_line.fly:
-            self.ba_run_onthefly = self.cmd_line.fly
+            self.ad_run_onthefly = self.cmd_line.fly
 
         if self.cmd_line.logfile:
             self.ad_path_logfile = self.cmd_line.logfile
@@ -635,7 +635,7 @@ class InputParameters:
         """
         tmp = []
         if isinstance(self.ad_run_nb, str) and self.ad_run_nb != 'all':
-            if not self.ba_run_onthefly:
+            if not self.ad_run_onthefly:
                 try:
                     for nb in self.ad_run_nb.split(','):
                         tmp.append(int(nb))
@@ -744,7 +744,7 @@ class InputInteractive:
         functions = [['--- MotionCor ---', 'ba_run_motioncor', 'mc'],
                      ['--- Ctffind ---', 'ba_run_ctffind', 'ctf'],
                      ['--- Batchruntomo ---', 'ba_run_batchruntomo', 'brt'],
-                     ['--- On-the-fly ---', 'ba_run_onthefly', 'otf']]
+                     ['--- On-the-fly ---', 'ad_run_onthefly', 'otf']]
         for func in functions:
             if all_inputs[func[1]] == '1' or all_inputs[func[1]] == 'True':
                 print(func[0])
@@ -833,8 +833,8 @@ class OnTheFly:
     def __init__(self, inputs):
         self.path = inputs.ba_path_raw if inputs.ba_run_motioncor else inputs.ad_path_motioncor
         self.prefix = inputs.ba_set_prefix2look4
-        self.extension = 'tif' if inputs.ba_mc_tif and inputs.ba_run_motioncor else 'mrc'
-        self.field_nb = inputs.ba_set_field_nb
+        self.extension = 'tif' if inputs.ad_mc_tif and inputs.ba_run_motioncor else 'mrc'
+        self.field_nb = inputs.ad_set_field_nb
 
         # refresh
         self.time_between_checks = 5
@@ -847,7 +847,7 @@ class OnTheFly:
         # tolerate some inactivity
         self.buffer = 0
         try:
-            self.buffer_tolerance_sec = int(inputs.ba_otf_max_time2try) * 60
+            self.buffer_tolerance_sec = int(inputs.ad_otf_max_time2try) * 60
         except ValueError as err:
             raise ValueError(f'On-the-fly: {err}')
         self.buffer_tolerance = self.buffer_tolerance_sec // self.time_between_checks
@@ -862,7 +862,7 @@ class OnTheFly:
         self.len_current_stack_previous_check = 0
         self.len_current_stack = 0
         try:
-            self.len_expected = int(inputs.ba_otf_max_images_per_stack)
+            self.len_expected = int(inputs.ad_otf_max_images_per_stack)
         except ValueError as err:
             raise ValueError(f'On-the-fly: {err}')
 
@@ -1103,7 +1103,7 @@ class Metadata:
         self.stacks_len = None
         self.stacks_images_per_stack = None
         self.path2catch = inputs.ba_path_raw if inputs.ba_run_motioncor else inputs.ad_path_motioncor
-        self.extension = 'tif' if inputs.ba_mc_tif and inputs.ba_run_motioncor else 'mrc'
+        self.extension = 'tif' if inputs.ad_mc_tif and inputs.ba_run_motioncor else 'mrc'
 
     def get_metadata(self):
         """Gather metadata and return it in one DataFrame."""
@@ -1174,7 +1174,7 @@ class Metadata:
         # Every stack in stack2remove will be remove from raw_files.
         # If stack2remove is empty, negative restriction is not applied.
         # OnTheFly already manages the negative restriction.
-        if self.inputs.ad_run_overwrite or self.inputs.ba_run_onthefly:
+        if self.inputs.ad_run_overwrite or self.inputs.ad_run_onthefly:
             stack2remove = []
         else:
             stack2remove = self._exclude_stacks2remove()
@@ -1184,7 +1184,7 @@ class Metadata:
         for file in raw_files:
             filename_split = file.split('/')[-1].split('_')
             try:
-                stack_nb = int(''.join(i for i in filename_split[self.inputs.ba_set_field_nb] if i.isdigit()))
+                stack_nb = int(''.join(i for i in filename_split[self.inputs.ad_set_field_nb] if i.isdigit()))
             except IndexError or ValueError as err:
                 raise IndexError(f'Clean files (nb): {err}')
 
@@ -1200,7 +1200,7 @@ class Metadata:
             raw_files_cleaned.append(file)
             raw_files_cleaned_nb.append(stack_nb)
             try:
-                file_tilt = filename_split[self.inputs.ba_set_field_tilt].replace(
+                file_tilt = filename_split[self.inputs.ad_set_field_tilt].replace(
                     f'.{self.extension}', '').replace('[', '').replace(']', '')
                 raw_files_cleaned_tilt.append(float(file_tilt))
             except IndexError or ValueError as err:
@@ -1233,22 +1233,22 @@ class Metadata:
 
         :return mc_gpu:     list of GPU to map with an image.
         """
-        if self.inputs.ba_run_onthefly:
+        if self.inputs.ad_run_onthefly:
             # Used for otf: every time pp is called, it must recompute the available GPUs.
             # Thus it needs to remember the original input.
-            self.inputs.ba_mc_gpu = self.inputs.hidden_oft_gpu
+            self.inputs.ad_mc_gpu = self.inputs.hidden_oft_gpu
 
         # catch GPU
-        if self.inputs.ba_mc_gpu == 'auto':
-            self.inputs.ba_mc_gpu = self._get_gpu_from_nvidia_smi()
+        if self.inputs.ad_mc_gpu == 'auto':
+            self.inputs.ad_mc_gpu = self._get_gpu_from_nvidia_smi()
         else:
             try:
-                self.inputs.ba_mc_gpu = [int(gpu) for gpu in self.inputs.ba_mc_gpu.split(',')]
+                self.inputs.ad_mc_gpu = [int(gpu) for gpu in self.inputs.ad_mc_gpu.split(',')]
             except ValueError:
-                raise ValueError("Get GPU: ba_mc_gpu must be an (list of) integers or 'auto'")
+                raise ValueError("Get GPU: ad_mc_gpu must be an (list of) integers or 'auto'")
 
         # map to DataFrame
-        mc_gpu = [str(i) for i in self.inputs.ba_mc_gpu] * math.ceil(self.stacks_len / len(self.inputs.ba_mc_gpu))
+        mc_gpu = [str(i) for i in self.inputs.ad_mc_gpu] * math.ceil(self.stacks_len / len(self.inputs.ad_mc_gpu))
         len_diff = len(mc_gpu) - self.stacks_len
         if len_diff:
             mc_gpu = mc_gpu[:-len_diff]
@@ -1340,7 +1340,7 @@ class MotionCor:
         runs, run = len(mc_commands), 0
         header = f'{Colors.b_b}{Colors.k}stack{self.stack_padded}{Colors.reset}'
         self._update_progress(runs, run, head=header)
-        for job in self._yield_chunks(jobs, len(inputs.ba_mc_gpu) * job_per_gpu):
+        for job in self._yield_chunks(jobs, len(inputs.ad_mc_gpu) * job_per_gpu):
             # from the moment the next line is read, every process in job are spawned
             for process in [i for i in job]:
                 self.log.append(process.communicate()[0].decode('UTF-8'))
@@ -1349,17 +1349,17 @@ class MotionCor:
 
     @staticmethod
     def _get_command(image, inputs):
-        if inputs.ba_mc_tif:
+        if inputs.ad_mc_tif:
             input_motioncor = 'InTiff'
         else:
             input_motioncor = 'InMrc'
 
-        return [inputs.ba_mc_motioncor,
+        return [inputs.ad_mc_motioncor,
                 f'-{input_motioncor}', image[0],
                 '-OutMrc', image[1],
                 '-Gpu', image[2],
                 '-GpuMemUsage', inputs.ad_mc_gpu_mem_usage,
-                '-Gain', inputs.ba_mc_gain,
+                '-Gain', inputs.ad_mc_gain,
                 '-Tol', inputs.ad_mc_tolerance,
                 '-Patch', inputs.ad_mc_patch,
                 '-Iter', inputs.ad_mc_iter,
@@ -1735,7 +1735,7 @@ class Ctffind:
 
     def _get_ctffind(self, image, inputs):
         """The inputs will go through stdin. Last input: expert options=no."""
-        cmd = [inputs.ba_ctf_ctffind]
+        cmd = [inputs.ad_ctf_ctffind]
         input_dict = [image['output'],
                       self.filename_output,
                       str(inputs.ba_mc_desired_pixelsize),
@@ -1825,7 +1825,7 @@ def preprocessing(inputs):
            f"{TAB}Tilt-series: {metadata_object.stacks_nb}\n"
            f"{TAB}Possible nb of images per stack: {metadata_object.stacks_images_per_stack}")
     if inputs.ba_run_motioncor:
-        logger(f"Starting MotionCor on GPU {', '.join([str(gpu) for gpu in inputs.ba_mc_gpu])}:")
+        logger(f"Starting MotionCor on GPU {', '.join([str(gpu) for gpu in inputs.ad_mc_gpu])}:")
 
     worker = WorkerManager(metadata_object.stacks_nb, inputs)
 
@@ -1866,8 +1866,8 @@ if __name__ == '__main__':
           f'Newstack:     {inputs_object.ba_run_stack}\n'
           f'Batchruntomo: {inputs_object.ba_run_batchruntomo}\n')
 
-    if inputs_object.ba_run_onthefly:
-        print(f'On-the-fly processing: (Tolerated inactivity: {inputs_object.ba_otf_max_time2try}min).')
+    if inputs_object.ad_run_onthefly:
+        print(f'On-the-fly processing: (Tolerated inactivity: {inputs_object.ad_otf_max_time2try}min).')
         otf = OnTheFly(inputs_object)
         otf.run(inputs_object)
     else:
